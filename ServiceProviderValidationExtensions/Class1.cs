@@ -1,64 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ServiceProviderValidationExtensions
 {
-    public class Class1
-    {
-
-    }
-
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            //CreateHostBuilder(args).Build().UseServiceDescriptionCheck().Run();
-
-        }
-
-        //public static IHostBuilder CreateHostBuilder(string[] args) =>
-        //    Host.CreateDefaultBuilder(args)
-        //        .ConfigureWebHostDefaults(webBuilder =>
-        //        {
-        //            webBuilder.UseStartup<Startup>();
-        //        })
-        //        .ConfigureServiceDescriptionCheck();
-    }
-
-    public static class ServiceDescription
-    {
-        private static List<IGrouping<Type, ServiceDescriptor>> Descriptors;
-
-        public static IHostBuilder ConfigureServiceDescriptionCheck(this IHostBuilder hostBuilder)
-        {
-            hostBuilder.ConfigureServices((hbc, services) =>
-            {
-                Descriptors = services.Where(i => !i.ServiceType.Assembly.FullName.Contains("Microsoft"))
-                    .GroupBy(p => p.ServiceType)
-                    .Where(x => x.Count() > 1).ToList();
-
-            });
-
-            return hostBuilder;
-        }
-
-        public static IHost UseServiceDescriptionCheck(this IHost host)
-        {
-            var logger = host.Services.GetRequiredService<ILogger<Program>>();
-
-            Descriptors.ForEach(item =>
-            {
-                var count = item.Count();
-                logger.LogWarning("Service of type {Key} has been registered {count} times", item.Key, count);
-            });
-
-            return host;
-        }
-    }
-
     internal sealed class ExtendedValidationServiceProviderFactory : IServiceProviderFactory<IServiceCollection>
     {
         private readonly DefaultServiceProviderFactory _defaultServiceProviderFactory;
