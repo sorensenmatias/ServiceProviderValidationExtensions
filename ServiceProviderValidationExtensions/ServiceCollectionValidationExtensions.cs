@@ -18,13 +18,11 @@ namespace ServiceProviderIronedValidation
     public static class ServiceCollectionValidationExtensions
     {
         public static IServiceCollection AddSingleton<TService>(this IServiceCollection services, 
-            ServiceValidation serviceValidation = ServiceValidation.None, 
-            ImplementationValidation implementationValidation = ImplementationValidation.None) 
+            ServiceValidation serviceValidation = ServiceValidation.None) 
             where TService : class
         {
             ServiceCollectionServiceExtensions.AddSingleton<TService>(services);
             services.RegisterExclusiveService<TService>(serviceValidation);
-            services.RegisterExclusiveImplementation<TService, TService>(implementationValidation);
             return services;
         }
 
