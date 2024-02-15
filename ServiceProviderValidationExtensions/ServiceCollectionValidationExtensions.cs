@@ -48,6 +48,68 @@ namespace ServiceProviderIronedValidation
             return services;
         }
 
+        public static IServiceCollection AddScoped<TService>(this IServiceCollection services,
+            ServiceValidation serviceValidation = ServiceValidation.None)
+            where TService : class
+        {
+            ServiceCollectionServiceExtensions.AddScoped<TService>(services);
+            services.RegisterExclusiveService<TService>(serviceValidation);
+            return services;
+        }
+
+        public static IServiceCollection AddScoped<TService, TImplementation>(this IServiceCollection services,
+            ServiceValidation serviceValidation = ServiceValidation.None,
+            ImplementationValidation implementationValidation = ImplementationValidation.None)
+            where TService : class
+            where TImplementation : class, TService
+        {
+            ServiceCollectionServiceExtensions.AddScoped<TService, TImplementation>(services);
+            services.RegisterExclusiveService<TService>(serviceValidation);
+            services.RegisterExclusiveImplementation<TService, TImplementation>(implementationValidation);
+            return services;
+        }
+
+        public static IServiceCollection AddScoped<TService, TImplementation>(this IServiceCollection services,
+            ImplementationValidation implementationValidation = ImplementationValidation.None)
+            where TService : class
+            where TImplementation : class, TService
+        {
+            ServiceCollectionServiceExtensions.AddScoped<TService, TImplementation>(services);
+            services.RegisterExclusiveImplementation<TService, TImplementation>(implementationValidation);
+            return services;
+        }
+
+        public static IServiceCollection AddTransient<TService>(this IServiceCollection services,
+            ServiceValidation serviceValidation = ServiceValidation.None)
+            where TService : class
+        {
+            ServiceCollectionServiceExtensions.AddTransient<TService>(services);
+            services.RegisterExclusiveService<TService>(serviceValidation);
+            return services;
+        }
+
+        public static IServiceCollection AddTransient<TService, TImplementation>(this IServiceCollection services,
+            ServiceValidation serviceValidation = ServiceValidation.None,
+            ImplementationValidation implementationValidation = ImplementationValidation.None)
+            where TService : class
+            where TImplementation : class, TService
+        {
+            ServiceCollectionServiceExtensions.AddTransient<TService, TImplementation>(services);
+            services.RegisterExclusiveService<TService>(serviceValidation);
+            services.RegisterExclusiveImplementation<TService, TImplementation>(implementationValidation);
+            return services;
+        }
+
+        public static IServiceCollection AddTransient<TService, TImplementation>(this IServiceCollection services,
+            ImplementationValidation implementationValidation = ImplementationValidation.None)
+            where TService : class
+            where TImplementation : class, TService
+        {
+            ServiceCollectionServiceExtensions.AddTransient<TService, TImplementation>(services);
+            services.RegisterExclusiveImplementation<TService, TImplementation>(implementationValidation);
+            return services;
+        }
+
         public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection)
         {
             var serviceProvider = serviceCollection.BuildServiceProvider();
