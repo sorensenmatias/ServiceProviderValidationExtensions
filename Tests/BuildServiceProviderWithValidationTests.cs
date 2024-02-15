@@ -88,6 +88,18 @@ namespace Tests
                 .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nService IMyService is exclusive, but is registered 2 times.\r\nImplementation MyService is exclusive, but is registered 2 times: IMyService(2)");
         }
 
+        [Fact]
+        public void ExclusiveImplementationRegistrationForSameInterfaceIsAllowed()
+        {
+            var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddSingleton<IMyProvider, MyProvider1>(ImplementationValidation.ExclusiveImplementation);
+            serviceCollection.AddSingleton<IMyProvider, MyProvider2>(ImplementationValidation.ExclusiveImplementation);
+
+            var act = () => serviceCollection.BuildServiceProviderWithValidation();
+            act.Should().NotThrow();
+        }
+
         public interface IMyService
         {
         }
@@ -95,6 +107,21 @@ namespace Tests
         public class MyService : IMyService
         {
             
+        }
+
+        public interface IMyProvider
+        {
+            
+        }
+
+        public class MyProvider1 : IMyProvider
+        {
+            
+        }
+
+        public class MyProvider2 : IMyProvider
+        {
+
         }
     }
 }
