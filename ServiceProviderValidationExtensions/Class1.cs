@@ -81,16 +81,6 @@ namespace ServiceProviderValidationExtensions
         }
     }
 
-    public interface IExclusiveRegistration
-    {
-    }
-
-    public sealed class ExclusiveRegistration<TService> : IExclusiveRegistration
-        where TService : class
-    {
-    }
-
-
     public static class Ext
     {
         public static IServiceCollection AddSingletonExclusive<TService>(
@@ -113,9 +103,68 @@ namespace ServiceProviderValidationExtensions
         private static void RegisterExclusive<TService>(IServiceCollection services)
             where TService : class
         {
-            services.AddSingleton<IExclusiveRegistration, ExclusiveRegistration<TService>>();
+            var validationRegistrations = EnsureValidationRegistrations(services);
+            validationRegistrations.RegisterExclusive<TService>();
         }
+
+        private static ValidationRegistrations? TryGetValidationRegistrationsAtExpectedIndex(IServiceCollection services)
+        {
+            return services[0].ImplementationInstance as ValidationRegistrations;
+        }
+
+        private static ValidationRegistrations? SearchForValidationRegistrations(IServiceCollection services, out ServiceDescriptor? serviceDescriptor)
+        {
+            serviceDescriptor = services.FirstOrDefault(sd => sd.ImplementationInstance is ValidationRegistrations);
+            return (ValidationRegistrations?)serviceDescriptor?.ImplementationInstance;
+        }
+
+        private static ValidationRegistrations EnsureValidationRegistrations(IServiceCollection services)
+        {
+            if (services.Count == 0)
+            {
+                return CreateAndPersistInstance(services);
+            }
+
+            var validationRegistrations = TryGetValidationRegistrationsAtExpectedIndex(services);
+            if (validationRegistrations is not null)
+            {
+                return validationRegistrations;
+            }
+
+            validationRegistrations = SearchForValidationRegistrations(services, out var serviceDescriptor);
+            if (validationRegistrations is not null)
+            {
+                // Move instance to index 0
+                services.Remove(serviceDescriptor);
+                services.Insert(0, serviceDescriptor);
+
+                return validationRegistrations;
+            }
+
+            return CreateAndPersistInstance(services);
+
+            static ValidationRegistrations CreateAndPersistInstance(IServiceCollection services)
+            {
+                var validationRegistrations = new ValidationRegistrations();
+                services.Insert(0, new ServiceDescriptor(typeof(ValidationRegistrations), validationRegistrations));
+                return validationRegistrations;
+            }
+        }
+
         
+
+        private class ValidationRegistrations
+        {
+            private readonly List<Type> _exclusives = new();
+
+            public IReadOnlyCollection<Type> Exclusives => _exclusives;
+
+            public void RegisterExclusive<TService>()
+            {
+                _exclusives.Add(typeof(TService));
+            }
+        }
+
         public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection)
         {
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -148,9 +197,13 @@ namespace ServiceProviderValidationExtensions
 
         private static IEnumerable<string> GetExclusiveRegistrationErrors(IServiceProvider serviceProvider)
         {
-            var exclusiveRegistrations = serviceProvider
-                .GetServices<IExclusiveRegistration>()
-                .Select(er => er.GetType().GetGenericArguments().Single())
+            var validationRegistrations = serviceProvider.GetService<ValidationRegistrations>();
+            if (validationRegistrations is null)
+            {
+                yield break;
+            }
+
+            var exclusiveRegistrations = validationRegistrations.Exclusives
                 .GroupBy(t => t)
                 .Select(g => g.First());
 
