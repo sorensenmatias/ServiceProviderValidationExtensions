@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace ServiceProviderValidationExtensions.Internal;
+namespace ServiceProviderIronedValidation.Internal;
 
 internal static class Persistence
 {

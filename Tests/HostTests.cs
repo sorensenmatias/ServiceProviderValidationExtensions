@@ -2,7 +2,7 @@ using System.Collections;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ServiceProviderValidationExtensions;
+using ServiceProviderIronedValidation;
 
 namespace Tests
 {
@@ -48,8 +48,8 @@ namespace Tests
                 .UseServiceProviderExtendedValidation()
                 .ConfigureServices(sc =>
                 {
-                    sc.AddSingletonExclusive<IMyService, MyService>();
-                    sc.AddSingletonExclusive<IMyService, MyService>();
+                    sc.AddSingleton<IMyService, MyService>();
+                    sc.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
                 });
             
             var act = () => applicationBuilder.Build();
@@ -64,8 +64,8 @@ namespace Tests
         {
             var applicationBuilder = Host.CreateApplicationBuilder().ConfigureContainerWithServiceProviderExtendedValidation();
 
-            applicationBuilder.Services.AddSingletonExclusive<IMyService, MyService>();
-            applicationBuilder.Services.AddSingletonExclusive<IMyService, MyService>();
+            applicationBuilder.Services.AddSingleton<IMyService, MyService>();
+            applicationBuilder.Services.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
 
             var act = () => applicationBuilder.Build();
 
@@ -79,9 +79,9 @@ namespace Tests
         {
             var applicationBuilder = Host.CreateEmptyApplicationBuilder(null).ConfigureContainerWithServiceProviderExtendedValidation();
 
-            applicationBuilder.Services.AddSingletonExclusive<IMyService, MyService>();
-            applicationBuilder.Services.AddSingletonExclusive<IMyService, MyService>();
-
+            applicationBuilder.Services.AddSingleton<IMyService, MyService>();
+            applicationBuilder.Services.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
+            
             var act = () => applicationBuilder.Build();
 
             act.Should()

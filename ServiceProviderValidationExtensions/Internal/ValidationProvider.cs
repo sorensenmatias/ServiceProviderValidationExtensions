@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace ServiceProviderValidationExtensions.Internal;
+namespace ServiceProviderIronedValidation.Internal;
 
 internal static class ValidationProvider
 {
-    internal static IEnumerable<string> GetExclusiveRegistrationErrors(IServiceProvider serviceProvider)
+    internal static IEnumerable<string> GetExclusiveServiceRegistrationErrors(IServiceProvider serviceProvider)
     {
         var validationRegistrations = serviceProvider.GetService<ValidationRegistrations>();
         if (validationRegistrations is null)
@@ -12,17 +12,47 @@ internal static class ValidationProvider
             yield break;
         }
 
-        var exclusiveRegistrations = validationRegistrations.Exclusives
+        var exclusiveRegistrations = validationRegistrations.Services.Exclusives
             .GroupBy(t => t)
             .Select(g => g.First());
 
         foreach (var exclusiveRegistration in exclusiveRegistrations)
         {
-            var serviceRegistrationsCount = serviceProvider.GetServices(exclusiveRegistration).Count();
+            var registrationsCount = serviceProvider.GetServices(exclusiveRegistration).Count();
 
-            if (serviceRegistrationsCount > 1)
+            if (registrationsCount > 1)
             {
-                yield return $"Service {exclusiveRegistration.Name} is exclusive, but is registered {serviceRegistrationsCount} times.";
+                yield return $"Service {exclusiveRegistration.Name} is exclusive, but is registered {registrationsCount} times.";
+            }
+        }
+    }
+
+    internal static IEnumerable<string> GetExclusiveImplementationRegistrationErrors(IServiceProvider serviceProvider)
+    {
+        var validationRegistrations = serviceProvider.GetService<ValidationRegistrations>();
+        if (validationRegistrations is null)
+        {
+            yield break;
+        }
+
+        var exclusiveRegistrations = validationRegistrations.Implementations.Exclusives
+            .GroupBy(t => t.implementation)
+            .ToList();
+
+        foreach (var exclusiveRegistration in exclusiveRegistrations)
+        {
+            var registrations = exclusiveRegistration
+                .Select(t => t.service)
+                .Distinct()
+                .Select(service => (service, registrations: serviceProvider.GetServices(service).Count()))
+                .ToList();
+
+            var combinedSum = registrations.Sum(r => r.registrations);
+
+            if (combinedSum > 1)
+            {
+                yield return
+                    $"Implementation {exclusiveRegistration.Key.Name} is exclusive, but is registered {combinedSum} times: {string.Join(", ", registrations.Select(t => $"{t.service.Name}({t.registrations})"))}";
             }
         }
     }
