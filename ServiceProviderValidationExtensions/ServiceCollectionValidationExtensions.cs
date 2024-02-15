@@ -117,6 +117,13 @@ namespace ServiceProviderIronedValidation
             return serviceProvider;
         }
 
+        public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, ServiceProviderOptions options)
+        {
+            var serviceProvider = serviceCollection.BuildServiceProvider(options);
+            serviceProvider.Validate();
+            return serviceProvider;
+        }
+
         public static void Validate(this IServiceProvider serviceProvider)
         {
             var errors = ValidationProvider.GetExclusiveServiceRegistrationErrors(serviceProvider)
