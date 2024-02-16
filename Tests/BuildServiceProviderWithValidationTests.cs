@@ -43,7 +43,7 @@ namespace Tests
             var act = () => serviceCollection.BuildServiceProviderWithValidation();
             act.Should()
                 .ThrowExactly<ServiceProviderValidationException>()
-                .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nImplementation MyService is exclusive, but is registered 2 times: IMyService(2)");
+                .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nImplementation MyService for service IMyService is exclusive, but is registered 2 times.");
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Tests
             var act = () => serviceCollection.BuildServiceProviderWithValidation();
             act.Should()
                 .ThrowExactly<ServiceProviderValidationException>()
-                .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nImplementation MyService is exclusive, but is registered 2 times: IMyService(2)");
+                .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nImplementation MyService for service IMyService is exclusive, but is registered 2 times.");
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace Tests
             var act = () => serviceCollection.BuildServiceProviderWithValidation();
             act.Should()
                 .ThrowExactly<ServiceProviderValidationException>()
-                .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nService IMyService is exclusive, but is registered 2 times.\r\nImplementation MyService is exclusive, but is registered 2 times: IMyService(2)");
+                .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nService IMyService is exclusive, but is registered 2 times.\r\nImplementation MyService for service IMyService is exclusive, but is registered 2 times.");
         }
 
         [Fact]

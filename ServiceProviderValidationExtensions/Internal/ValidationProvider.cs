@@ -37,22 +37,18 @@ internal static class ValidationProvider
 
         var exclusiveRegistrations = validationRegistrations.Implementations.Exclusives
             .GroupBy(t => t.implementation)
-            .ToList();
+            .Select(g => g.First());
 
         foreach (var exclusiveRegistration in exclusiveRegistrations)
         {
-            var registrations = exclusiveRegistration
-                .Select(t => t.service)
-                .Distinct()
-                .Select(service => (service, registrations: serviceProvider.GetServices(service).Count()))
-                .ToList();
+            var registrationsCount = serviceProvider
+                .GetServices(exclusiveRegistration.service)
+                .Count(o => o?.GetType() == exclusiveRegistration.implementation);
 
-            var combinedSum = registrations.Sum(r => r.registrations);
-
-            if (combinedSum > 1)
+            if (registrationsCount > 1)
             {
                 yield return
-                    $"Implementation {exclusiveRegistration.Key.Name} is exclusive, but is registered {combinedSum} times: {string.Join(", ", registrations.Select(t => $"{t.service.Name}({t.registrations})"))}";
+                    $"Implementation {exclusiveRegistration.implementation.Name} for service {exclusiveRegistration.service.Name} is exclusive, but is registered {registrationsCount} times.";
             }
         }
     }
