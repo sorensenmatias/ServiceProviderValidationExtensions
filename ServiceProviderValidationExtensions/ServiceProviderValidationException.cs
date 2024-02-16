@@ -1,4 +1,4 @@
-﻿namespace ServiceProviderIronedValidation;
+﻿namespace ServiceProviderValidationExtensions;
 
 public sealed class ServiceProviderValidationException : Exception
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ServiceProviderIronedValidation.Internal;
+using ServiceProviderValidationExtensions.Internal;
 
-namespace ServiceProviderIronedValidation
+namespace ServiceProviderValidationExtensions
 {
     public enum ServiceValidation
     {

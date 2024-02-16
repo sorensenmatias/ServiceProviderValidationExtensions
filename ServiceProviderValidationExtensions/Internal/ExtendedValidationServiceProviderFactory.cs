@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace ServiceProviderIronedValidation.Internal;
+namespace ServiceProviderValidationExtensions.Internal;
 
 internal sealed class ExtendedValidationServiceProviderFactory : IServiceProviderFactory<IServiceCollection>
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace ServiceProviderIronedValidation.Internal;
+namespace ServiceProviderValidationExtensions.Internal;
 
 internal static class ValidationProvider
 {

@@ -2,7 +2,7 @@ using System.Collections;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ServiceProviderIronedValidation;
+using ServiceProviderValidationExtensions;
 
 namespace Tests
 {

@@ -1,6 +1,6 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceProviderIronedValidation;
+using ServiceProviderValidationExtensions;
 
 namespace Tests
 {

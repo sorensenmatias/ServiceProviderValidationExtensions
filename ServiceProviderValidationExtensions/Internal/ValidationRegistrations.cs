@@ -1,4 +1,4 @@
-﻿namespace ServiceProviderIronedValidation.Internal;
+﻿namespace ServiceProviderValidationExtensions.Internal;
 
 internal class ValidationRegistrations
 {
