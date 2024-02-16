@@ -5,13 +5,25 @@ namespace ServiceProviderIronedValidation
 {
     public enum ServiceValidation
     {
+        /// <summary>
+        /// No service validation.
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// Register exclusive validation for the service, which means that not more than one registration for this exact service type can be made.
+        /// </summary>
         ExclusiveService = 1
     }
 
     public enum ImplementationValidation
     {
+        /// <summary>
+        /// No implementation validation.
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// Register exclusive validation for the implementation, which means that not more than one registration for this pair of service type and implementation can be made.
+        /// </summary>
         ExclusiveImplementation = 1
     }
 
