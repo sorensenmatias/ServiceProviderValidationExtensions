@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
 
     <Authors>Matias Sørensen</Authors>
-    <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
 
@@ -22,6 +21,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <None Include="../readme.md" Pack="true" PackagePath="readme.md"/>
     <None Include="../LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
   </ItemGroup>
 
