@@ -1,4 +1,3 @@
-using System.Collections;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,39 +8,6 @@ namespace Tests
 {
     public class HostTests
     {
-        public class HostBuilders : IEnumerable<Func<Action<IServiceCollection>, IHost>>
-        {
-            public IEnumerator<Func<Action<IServiceCollection>, IHost>> GetEnumerator()
-            {
-                {
-                    var defaultHostBuilder = (Action<IServiceCollection> configureServices) => Host.CreateDefaultBuilder()
-                    .UseServiceProviderExtendedValidation()
-                    .ConfigureServices(configureServices)
-                    .Build();
-
-                    yield return defaultHostBuilder;
-                }
-                {
-                    var applicationBuilder = (Action<IServiceCollection> configureServices) =>
-                    {
-                        var applicationBuilder = Host.CreateApplicationBuilder().ConfigureContainerWithServiceProviderExtendedValidation();
-                        configureServices(applicationBuilder.Services);
-                        return applicationBuilder.Build();
-                    };
-                    
-                    yield return applicationBuilder;
-                }
-
-            
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-        }
-
-
         [Fact]
         public void DefaultBuilder_TriggersValidation()
         {

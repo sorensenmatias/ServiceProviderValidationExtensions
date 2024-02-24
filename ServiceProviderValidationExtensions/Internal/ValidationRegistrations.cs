@@ -2,9 +2,9 @@
 
 internal class ValidationRegistrations
 {
-    public ServicesRegistrations Services = new ServicesRegistrations();
+    public readonly ServicesRegistrations Services = new();
     
-    public ImplementationRegistrations Implementations = new ImplementationRegistrations();
+    public readonly ImplementationRegistrations Implementations = new();
 
     internal class ServicesRegistrations
     {
