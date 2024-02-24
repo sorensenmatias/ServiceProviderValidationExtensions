@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using ServiceProviderValidationExtensions;
 using ServiceProviderValidationExtensions.Hosting;
 
-namespace Tests
+namespace Tests.Hosting
 {
     public class HostTests
     {
@@ -18,7 +18,7 @@ namespace Tests
                     sc.AddSingleton<IMyService, MyService>();
                     sc.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
                 });
-            
+
             var act = () => applicationBuilder.Build();
 
             act.Should()
@@ -48,22 +48,22 @@ namespace Tests
 
             applicationBuilder.Services.AddSingleton<IMyService, MyService>();
             applicationBuilder.Services.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
-            
+
             var act = () => applicationBuilder.Build();
 
             act.Should()
                 .ThrowExactly<ServiceProviderValidationException>()
                 .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nService IMyService is exclusive, but is registered 2 times.");
         }
-        
+
         public interface IMyService
         {
-            
+
         }
 
         public class MyService : IMyService
         {
-            
+
         }
     }
 }
