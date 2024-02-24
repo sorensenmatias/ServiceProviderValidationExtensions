@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ServiceProviderValidationExtensions.Host.Internal;
+using ServiceProviderValidationExtensions.Hosting.Internal;
 
-namespace ServiceProviderValidationExtensions.Host;
+namespace ServiceProviderValidationExtensions.Hosting;
 
 public static class HostBuilderExtensions{
     public static IHostBuilder UseServiceProviderExtendedValidation(this IHostBuilder hostBuilder)
