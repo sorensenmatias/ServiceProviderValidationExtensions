@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ServiceProviderValidationExtensions.Host\ServiceProviderValidationExtensions.Hosting.csproj" />
+    <ProjectReference Include="..\src\ServiceProviderValidationExtensions.Hosting\ServiceProviderValidationExtensions.Hosting.csproj" />
   </ItemGroup>
 
 </Project>
