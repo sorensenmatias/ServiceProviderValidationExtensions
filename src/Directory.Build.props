@@ -1,22 +1,19 @@
 <Project>
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
 
-    <Authors>Matias Sørensen</Authors>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <Authors>Matias Sørensen</Authors>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
 
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
-  </PropertyGroup>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\readme.md" Pack="true" PackagePath="" />
-    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\readme.md" Pack="true" PackagePath="" />
+        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
+    </ItemGroup>
 </Project>
-
-
-

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ServiceProviderValidationExtensions.Internal;
 
@@ -37,7 +37,7 @@ internal static class Persistence
         }
     }
 
-    static ValidationRegistrations? TryGetValidationRegistrationsAtExpectedIndex(IServiceCollection services)
+    private static ValidationRegistrations? TryGetValidationRegistrationsAtExpectedIndex(IServiceCollection services)
     {
         return services[0].ImplementationInstance as ValidationRegistrations;
     }
