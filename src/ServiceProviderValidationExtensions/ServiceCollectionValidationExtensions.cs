@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using ServiceProviderValidationExtensions.Internal;
 
 namespace ServiceProviderValidationExtensions;
@@ -126,7 +126,7 @@ public static class ServiceCollectionValidationExtensions
         return services;
     }
 
-    public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, ReportingBuilder? reportingBuilder = null)
+    public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, IReportingBuilder? reportingBuilder = null)
     {
         var serviceProvider = ReportAndBuildAndValidate(serviceCollection, reportingBuilder, null);
         return serviceProvider;
@@ -137,8 +137,7 @@ public static class ServiceCollectionValidationExtensions
         return ReportAndBuildAndValidate(serviceCollection, reportingBuilder, options);
     }
 
-    internal static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection,
-        ReportingBuilder? reportingBuilder, ServiceProviderOptions? options)
+    internal static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection, IReportingBuilder? reportingBuilder, ServiceProviderOptions? options)
     {
         if (reportingBuilder is not null)
         {
