@@ -1,4 +1,4 @@
-﻿namespace ServiceProviderValidationExtensions;
+namespace ServiceProviderValidationExtensions;
 
 public class TypeInfo
 {

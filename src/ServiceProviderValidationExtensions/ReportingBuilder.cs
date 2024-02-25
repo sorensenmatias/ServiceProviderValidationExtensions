@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ServiceProviderValidationExtensions;
 
@@ -15,7 +15,10 @@ public class ReportingBuilder
 
     internal void Report(IServiceCollection serviceCollection)
     {
-        if (_duplicateService.Any()) ReportDuplicates(serviceCollection);
+        if (_duplicateService.Any())
+        {
+            ReportDuplicates(serviceCollection);
+        }
     }
 
     private void ReportDuplicates(IServiceCollection serviceCollection)
@@ -30,8 +33,10 @@ public class ReportingBuilder
                 .ToList();
 
             foreach (var action in _duplicateService)
+            {
                 action(new DuplicateServiceContent(new TypeInfo(groupItem.Key),
                     implementationTypes));
+            }
         }
     }
 

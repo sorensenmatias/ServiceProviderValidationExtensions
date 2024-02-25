@@ -47,5 +47,6 @@ public class ReportingTests
     }
 
     private record MyService : IMyService;
+
     private record MyService2 : IMyService;
 }
