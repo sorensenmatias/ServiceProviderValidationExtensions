@@ -27,6 +27,24 @@ namespace Tests.Hosting
         }
 
         [Fact]
+        public void DefaultBuilder_ReportsDuplicate()
+        {
+            var duplicates = new List<string>();
+
+            var applicationBuilder = Host.CreateDefaultBuilder()
+                .UseServiceProviderExtendedValidation(rb => rb.OnDuplicateService(dsc => duplicates.Add($"{dsc.ServiceType.DisplayName} is registered 2 times")))
+                .ConfigureServices(sc =>
+                {
+                    sc.AddSingleton<IMyService, MyService>();
+                    sc.AddSingleton<IMyService, MyService>();
+                });
+
+            applicationBuilder.Build();
+
+            duplicates.Should().Contain("Tests.Hosting.HostTests+IMyService is registered 2 times");
+        }
+
+        [Fact]
         public void ApplicationBuilder_TriggersValidation()
         {
             var applicationBuilder = Host.CreateApplicationBuilder().ConfigureContainerWithServiceProviderExtendedValidation();
@@ -39,6 +57,25 @@ namespace Tests.Hosting
             act.Should()
                 .ThrowExactly<ServiceProviderValidationException>()
                 .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nService IMyService is exclusive, but is registered 2 times.");
+        }
+
+        [Fact]
+        public void ApplicationBuilder_BasicReporting()
+        {
+            var duplicates = new List<string>();
+
+            var applicationBuilder = Host.CreateApplicationBuilder()
+                .ConfigureContainerWithServiceProviderExtendedValidation(rb => 
+                    rb.OnDuplicateService(dsc => 
+                        duplicates.Add($"{dsc.ServiceType.DisplayName} is registered 2 times")));
+
+
+            applicationBuilder.Services.AddSingleton<IMyService, MyService>();
+            applicationBuilder.Services.AddSingleton<IMyService, MyService>();
+
+            applicationBuilder.Build();
+
+            duplicates.Should().Contain("Tests.Hosting.HostTests+IMyService is registered 2 times");
         }
 
         [Fact]

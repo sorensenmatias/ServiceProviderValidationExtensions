@@ -17,11 +17,11 @@ public class ReportingTests
         var duplicateServiceOutput = new List<string>();
 
         var reportingBuilder = new ReportingBuilder().OnDuplicateService(ds => duplicateServiceOutput.Add(
-            $"{ds.ServiceType.Name} is registered {ds.ImplementationTypes.Count} times"));
+            $"{ds.ServiceType.DisplayName} is registered {ds.ImplementationTypes.Count} times"));
 
         serviceCollection.BuildServiceProviderWithValidation(reportingBuilder);
 
-        duplicateServiceOutput.Should().ContainSingle().Which.Should().Be("IMyService is registered 2 times");
+        duplicateServiceOutput.Should().ContainSingle().Which.Should().Be("Tests.ReportingTests+IMyService is registered 2 times");
     }
 
     [Fact]
@@ -35,11 +35,11 @@ public class ReportingTests
         var duplicateServiceOutput = new List<string>();
 
         var reportingBuilder = new ReportingBuilder().OnDuplicateService(ds => duplicateServiceOutput.Add(
-            $"{ds.ServiceType.Name} is registered {ds.ImplementationTypes.Count} times"));
+            $"{ds.ServiceType.DisplayName} is registered {ds.ImplementationTypes.Count} times"));
 
         serviceCollection.BuildServiceProviderWithValidation(reportingBuilder);
 
-        duplicateServiceOutput.Should().ContainSingle().Which.Should().Be("IMyService is registered 2 times");
+        duplicateServiceOutput.Should().ContainSingle().Which.Should().Be("Tests.ReportingTests+IMyService is registered 2 times");
     }
 
     private interface IMyService
