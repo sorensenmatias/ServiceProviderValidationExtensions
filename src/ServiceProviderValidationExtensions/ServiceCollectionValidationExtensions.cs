@@ -122,16 +122,35 @@ namespace ServiceProviderValidationExtensions
             return services;
         }
 
-        public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection)
+        public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, ReportingBuilder? reportingBuilder = null)
         {
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            serviceProvider.Validate();
+            var serviceProvider = ReportAndBuildAndValidate(serviceCollection, reportingBuilder, null);
             return serviceProvider;
         }
 
-        public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, ServiceProviderOptions options)
+        public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, ServiceProviderOptions options, ReportingBuilder? reportingBuilder = null)
         {
-            var serviceProvider = serviceCollection.BuildServiceProvider(options);
+            return ReportAndBuildAndValidate(serviceCollection, reportingBuilder, options);
+        }
+
+        internal static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection,
+            ReportingBuilder? reportingBuilder, ServiceProviderOptions? options)
+        {
+            if (reportingBuilder is not null)
+            {
+                reportingBuilder.Report(serviceCollection);
+            }
+
+            ServiceProvider serviceProvider;
+            if (options is not null)
+            {
+                serviceProvider = serviceCollection.BuildServiceProvider(options);
+            }
+            else
+            {
+                serviceProvider = serviceCollection.BuildServiceProvider();
+            }
+            
             serviceProvider.Validate();
             return serviceProvider;
         }
