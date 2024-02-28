@@ -2,29 +2,29 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ServiceProviderValidationExtensions;
 
-public interface IReportingBuilder
+public interface IReportConfigurer
 {
     void Report(IServiceCollection serviceCollection);
 }
 
-public class ReportingBuilder : ReportingBuilder.IReportingBuilderDuplicateService
+public class ReportConfigurer : ReportConfigurer.IReportConfigurerDuplicateService
 {
     private readonly IList<Action<DuplicateServiceContent>> _duplicateService = new List<Action<DuplicateServiceContent>>();
     private readonly IList<Type> _duplicateServiceExclusions = new List<Type>();
 
-    public IReportingBuilderDuplicateService Except<T>()
+    public IReportConfigurerDuplicateService Except<T>()
     {
         _duplicateServiceExclusions.Add(typeof(T));
         return this;
     }
 
-    public IReportingBuilderDuplicateService Except(Type type)
+    public IReportConfigurerDuplicateService Except(Type type)
     {
         _duplicateServiceExclusions.Add(type);
         return this;
     }
 
-    public IReportingBuilderDuplicateService OnDuplicateService(Action<DuplicateServiceContent> action)
+    public IReportConfigurerDuplicateService OnDuplicateService(Action<DuplicateServiceContent> action)
     {
         _duplicateService.Add(action);
         return this;
@@ -77,10 +77,10 @@ public class ReportingBuilder : ReportingBuilder.IReportingBuilderDuplicateServi
         }
     }
 
-    public interface IReportingBuilderDuplicateService : IReportingBuilder
+    public interface IReportConfigurerDuplicateService : IReportConfigurer
     {
-        IReportingBuilderDuplicateService Except<T>();
-        IReportingBuilderDuplicateService Except(Type type);
+        IReportConfigurerDuplicateService Except<T>();
+        IReportConfigurerDuplicateService Except(Type type);
     }
 
     public class DuplicateServiceContent

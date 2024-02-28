@@ -126,18 +126,18 @@ public static class ServiceCollectionValidationExtensions
         return services;
     }
 
-    public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, IReportingBuilder? reportingBuilder = null)
+    public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, IReportConfigurer? reportingBuilder = null)
     {
         var serviceProvider = ReportAndBuildAndValidate(serviceCollection, reportingBuilder, null);
         return serviceProvider;
     }
 
-    public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, ServiceProviderOptions options, ReportingBuilder? reportingBuilder = null)
+    public static ServiceProvider BuildServiceProviderWithValidation(this IServiceCollection serviceCollection, ServiceProviderOptions options, ReportConfigurer? reportingBuilder = null)
     {
         return ReportAndBuildAndValidate(serviceCollection, reportingBuilder, options);
     }
 
-    internal static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection, IReportingBuilder? reportingBuilder, ServiceProviderOptions? options)
+    internal static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection, IReportConfigurer? reportingBuilder, ServiceProviderOptions? options)
     {
         if (reportingBuilder is not null)
         {
