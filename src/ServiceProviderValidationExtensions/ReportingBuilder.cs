@@ -9,7 +9,7 @@ public interface IReportConfigurer
 
 public class ReportConfigurer : ReportConfigurer.IReportConfigurerDuplicateService
 {
-    private readonly IList<Action<DuplicateServiceContent>> _duplicateService = new List<Action<DuplicateServiceContent>>();
+    private Action<DuplicateServiceContent>? _duplicateService;
     private readonly IList<Type> _duplicateServiceExclusions = new List<Type>();
 
     public IReportConfigurerDuplicateService Except<T>()
@@ -26,13 +26,13 @@ public class ReportConfigurer : ReportConfigurer.IReportConfigurerDuplicateServi
 
     public IReportConfigurerDuplicateService OnDuplicateService(Action<DuplicateServiceContent> action)
     {
-        _duplicateService.Add(action);
+        _duplicateService = action;
         return this;
     }
 
     public void Report(IServiceCollection serviceCollection)
     {
-        if (_duplicateService.Any())
+        if (_duplicateService is not null)
         {
             ReportDuplicates(serviceCollection);
         }
@@ -50,12 +50,14 @@ public class ReportConfigurer : ReportConfigurer.IReportConfigurerDuplicateServi
                         return false;
                     }
 
-                    if (duplicateServiceExclusion.IsGenericType)
+                    if (!duplicateServiceExclusion.IsGenericType)
                     {
-                        if (sd.ServiceType.IsDerivedFromGenericParent(duplicateServiceExclusion))
-                        {
-                            return false;
-                        }
+                        continue;
+                    }
+
+                    if (sd.ServiceType.IsDerivedFromGenericParent(duplicateServiceExclusion))
+                    {
+                        return false;
                     }
                 }
 
@@ -70,10 +72,7 @@ public class ReportConfigurer : ReportConfigurer.IReportConfigurerDuplicateServi
                 .Select(t => new TypeInfo(t))
                 .ToList();
 
-            foreach (var action in _duplicateService)
-            {
-                action(new DuplicateServiceContent(new TypeInfo(groupItem.Key), implementationTypes));
-            }
+            _duplicateService?.Invoke(new DuplicateServiceContent(new TypeInfo(groupItem.Key), implementationTypes));
         }
     }
 
