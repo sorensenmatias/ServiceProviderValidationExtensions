@@ -137,7 +137,7 @@ public static class ServiceCollectionValidationExtensions
         return ReportAndBuildAndValidate(serviceCollection, reportingBuilder, options);
     }
 
-    internal static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection, IReportConfigurer? reportingConfigurer, ServiceProviderOptions? options)
+    private static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection, IReportConfigurer? reportingConfigurer, ServiceProviderOptions? options)
     {
         if (reportingConfigurer is not null)
         {
@@ -170,7 +170,17 @@ public static class ServiceCollectionValidationExtensions
         }
     }
 
-    public static void RegisterExclusiveService<TService>(this IServiceCollection services, ServiceValidation serviceValidation)
+    /// <summary>
+    ///     Marks the <see cref="TService"/> as exclusive (only one registration can exist in the ServiceProvider).
+    /// </summary>
+    public static IServiceCollection SetExclusiveService<TService>(this IServiceCollection services)
+        where TService : class
+    {
+        services.RegisterExclusiveService<TService>(ServiceValidation.ExclusiveService);
+        return services;
+    }
+
+    private static void RegisterExclusiveService<TService>(this IServiceCollection services, ServiceValidation serviceValidation)
         where TService : class
     {
         switch (serviceValidation)
@@ -186,8 +196,17 @@ public static class ServiceCollectionValidationExtensions
         }
     }
 
-    public static void RegisterExclusiveImplementation<TService, TImplementation>(this IServiceCollection services, ImplementationValidation implementationValidation)
+    /// <summary>
+    ///     Marks the (<see cref="TService"/>,<see cref="TImplementation"/>) combination as exclusive (only one registration can exist in the ServiceProvider). 
+    /// </summary>
+    public static void SetExclusiveImplementation<TService, TImplementation>(this IServiceCollection services)
         where TImplementation : class
+    {
+        services.RegisterExclusiveImplementation<TService, TImplementation>(ImplementationValidation.ExclusiveImplementation);
+    }
+
+    private static void RegisterExclusiveImplementation<TService, TImplementation>(this IServiceCollection services,
+        ImplementationValidation implementationValidation) where TImplementation : class
     {
         switch (implementationValidation)
         {
