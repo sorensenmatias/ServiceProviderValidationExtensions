@@ -137,11 +137,11 @@ public static class ServiceCollectionValidationExtensions
         return ReportAndBuildAndValidate(serviceCollection, reportingBuilder, options);
     }
 
-    internal static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection, IReportConfigurer? reportingBuilder, ServiceProviderOptions? options)
+    internal static ServiceProvider ReportAndBuildAndValidate(IServiceCollection serviceCollection, IReportConfigurer? reportingConfigurer, ServiceProviderOptions? options)
     {
-        if (reportingBuilder is not null)
+        if (reportingConfigurer is not null)
         {
-            reportingBuilder.Report(serviceCollection);
+            reportingConfigurer.Report(serviceCollection);
         }
 
         ServiceProvider serviceProvider;

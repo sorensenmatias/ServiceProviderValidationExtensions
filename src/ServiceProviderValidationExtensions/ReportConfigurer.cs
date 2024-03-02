@@ -9,33 +9,33 @@ public sealed class ReportConfigurer : IReportConfigurer
     private readonly IList<Type> _duplicateServiceExclusions = new List<Type>();
     
     public ReportConfigurer OnDuplicateService(Action<DuplicateServiceContent> action,
-        Action<ReportingBuilderDuplicateServiceConfiguration>? configuration = null)
+        Action<ReportingDuplicateServiceConfiguration>? configuration = null)
     {
         _duplicateServiceAction = action;
         if (configuration is not null)
         {
-            configuration(new ReportingBuilderDuplicateServiceConfiguration(this));
+            configuration(new ReportingDuplicateServiceConfiguration(this));
         }
         
         return this;
     }
 
-    public sealed class ReportingBuilderDuplicateServiceConfiguration
+    public sealed class ReportingDuplicateServiceConfiguration
     {
         private readonly ReportConfigurer _reportConfigurer;
 
-        internal ReportingBuilderDuplicateServiceConfiguration(ReportConfigurer reportConfigurer)
+        internal ReportingDuplicateServiceConfiguration(ReportConfigurer reportConfigurer)
         {
             _reportConfigurer = reportConfigurer;
         }
 
-        public ReportingBuilderDuplicateServiceConfiguration Except<T>()
+        public ReportingDuplicateServiceConfiguration Except<T>()
         {
             _reportConfigurer._duplicateServiceExclusions.Add(typeof(T));
             return this;
         }
 
-        public ReportingBuilderDuplicateServiceConfiguration Except(Type type)
+        public ReportingDuplicateServiceConfiguration Except(Type type)
         {
             _reportConfigurer._duplicateServiceExclusions.Add(type);
             return this;

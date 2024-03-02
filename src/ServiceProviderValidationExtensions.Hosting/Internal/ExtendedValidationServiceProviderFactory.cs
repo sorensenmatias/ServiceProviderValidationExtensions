@@ -5,12 +5,12 @@ namespace ServiceProviderValidationExtensions.Hosting.Internal;
 internal sealed class ExtendedValidationServiceProviderFactory : IServiceProviderFactory<IServiceCollection>
 {
     private readonly DefaultServiceProviderFactory _defaultServiceProviderFactory;
-    private readonly ReportConfigurer? _reportingBuilder;
+    private readonly ReportConfigurer? _reportingConfigurer;
 
-    public ExtendedValidationServiceProviderFactory(DefaultServiceProviderFactory defaultServiceProviderFactory, ReportConfigurer? reportingBuilder)
+    public ExtendedValidationServiceProviderFactory(DefaultServiceProviderFactory defaultServiceProviderFactory, ReportConfigurer? reportingConfigurer)
     {
         _defaultServiceProviderFactory = defaultServiceProviderFactory;
-        _reportingBuilder = reportingBuilder;
+        _reportingConfigurer = reportingConfigurer;
     }
 
     public IServiceCollection CreateBuilder(IServiceCollection services)
@@ -20,7 +20,7 @@ internal sealed class ExtendedValidationServiceProviderFactory : IServiceProvide
 
     public IServiceProvider CreateServiceProvider(IServiceCollection containerBuilder)
     {
-        _reportingBuilder?.Report(containerBuilder);
+        _reportingConfigurer?.Report(containerBuilder);
         var serviceProvider = _defaultServiceProviderFactory.CreateServiceProvider(containerBuilder);
         serviceProvider.Validate();
         return serviceProvider;
