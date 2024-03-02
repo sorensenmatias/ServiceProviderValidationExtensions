@@ -16,7 +16,17 @@ internal static class TypeExtensions
         {
             return true;
         }
-        return type.BaseType.IsDerivedFromGenericParent(parentType)
-               || type.GetInterfaces().Any(t => t.IsDerivedFromGenericParent(parentType));
+
+        if (type.BaseType.IsDerivedFromGenericParent(parentType))
+        {
+            return true;
+        }
+
+        if (type.GetInterfaces().Any(t => t.IsDerivedFromGenericParent(parentType)))
+        {
+            return true;
+        }
+
+        return false;
     }
 }
