@@ -3,44 +3,57 @@ using ServiceProviderValidationExtensions.Internal;
 
 namespace ServiceProviderValidationExtensions;
 
-public interface IReportingBuilder
+public sealed class ReportingBuilder : IReportingBuilder
 {
-    void Report(IServiceCollection serviceCollection);
-}
-
-public class ReportingBuilder : ReportingBuilder.IReportingBuilderDuplicateService
-{
-    private readonly IList<Action<DuplicateServiceContent>> _duplicateService = new List<Action<DuplicateServiceContent>>();
+    private readonly IList<Action<DuplicateServiceContent>> _duplicateServiceActions = new List<Action<DuplicateServiceContent>>();
     private readonly IList<Type> _duplicateServiceExclusions = new List<Type>();
-
-    public IReportingBuilderDuplicateService Except<T>()
+    
+    public ReportingBuilder OnDuplicateService(Action<DuplicateServiceContent> action,
+        Action<ReportingBuilderDuplicateServiceConfiguration>? configuration = null)
     {
-        _duplicateServiceExclusions.Add(typeof(T));
+        _duplicateServiceActions.Add(action);
+        if (configuration is not null)
+        {
+            configuration(new ReportingBuilderDuplicateServiceConfiguration(this));
+        }
+        
         return this;
     }
 
-    public IReportingBuilderDuplicateService Except(Type type)
+    public sealed class ReportingBuilderDuplicateServiceConfiguration
     {
-        _duplicateServiceExclusions.Add(type);
-        return this;
-    }
+        private readonly ReportingBuilder _reportingBuilder;
 
-    public IReportingBuilderDuplicateService OnDuplicateService(Action<DuplicateServiceContent> action)
-    {
-        _duplicateService.Add(action);
-        return this;
+        internal ReportingBuilderDuplicateServiceConfiguration(ReportingBuilder reportingBuilder)
+        {
+            _reportingBuilder = reportingBuilder;
+        }
+
+        public ReportingBuilderDuplicateServiceConfiguration Except<T>()
+        {
+            _reportingBuilder._duplicateServiceExclusions.Add(typeof(T));
+            return this;
+        }
+
+        public ReportingBuilderDuplicateServiceConfiguration Except(Type type)
+        {
+            _reportingBuilder._duplicateServiceExclusions.Add(type);
+            return this;
+        }
     }
 
     public void Report(IServiceCollection serviceCollection)
     {
-        if (_duplicateService.Any())
-        {
-            ReportDuplicates(serviceCollection);
-        }
+        ReportDuplicateServices(serviceCollection);
     }
 
-    private void ReportDuplicates(IServiceCollection serviceCollection)
+    private void ReportDuplicateServices(IServiceCollection serviceCollection)
     {
+        if (!_duplicateServiceActions.Any())
+        {
+            return;
+        }
+
         var group = serviceCollection
             .Where(sd =>
             {
@@ -71,20 +84,14 @@ public class ReportingBuilder : ReportingBuilder.IReportingBuilderDuplicateServi
                 .Select(t => new TypeInfo(t))
                 .ToList();
 
-            foreach (var action in _duplicateService)
+            foreach (var action in _duplicateServiceActions)
             {
                 action(new DuplicateServiceContent(new TypeInfo(groupItem.Key), implementationTypes));
             }
         }
     }
 
-    public interface IReportingBuilderDuplicateService : IReportingBuilder
-    {
-        IReportingBuilderDuplicateService Except<T>();
-        IReportingBuilderDuplicateService Except(Type type);
-    }
-
-    public class DuplicateServiceContent
+    public sealed class DuplicateServiceContent
     {
         public DuplicateServiceContent(TypeInfo serviceType, IReadOnlyCollection<TypeInfo> implementationTypes)
         {
