@@ -16,7 +16,7 @@ public class ReportingTests
 
         var duplicateServiceOutput = new List<string>();
 
-        var reportingBuilder = new ReportingBuilder().OnDuplicateService(ds => duplicateServiceOutput.Add(
+        var reportingBuilder = new ReportConfigurer().OnDuplicateService(ds => duplicateServiceOutput.Add(
             $"{ds.ServiceType.DisplayName} is registered {ds.ImplementationTypes.Count} times"));
 
         serviceCollection.BuildServiceProviderWithValidation(reportingBuilder);
@@ -34,7 +34,7 @@ public class ReportingTests
 
         var duplicateServiceOutput = new List<string>();
 
-        var reportingBuilder = new ReportingBuilder().OnDuplicateService(ds => duplicateServiceOutput.Add(
+        var reportingBuilder = new ReportConfigurer().OnDuplicateService(ds => duplicateServiceOutput.Add(
             $"{ds.ServiceType.DisplayName} is registered {ds.ImplementationTypes.Count} times"));
 
         serviceCollection.BuildServiceProviderWithValidation(reportingBuilder);

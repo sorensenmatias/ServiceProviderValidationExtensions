@@ -14,7 +14,7 @@ public class HostFullReportingTests
     {
         var duplicateServiceReports = new List<string>();
 
-        void ConfigureReporting(ReportingBuilder rb)
+        void ConfigureReporting(ReportConfigurer rb)
         {
             rb.OnDuplicateService(dsc => duplicateServiceReports.Add($"{dsc.ServiceType.DisplayName} is registered {dsc.ImplementationTypes.Count} times"),
                 c => c.Except(typeof(IConfigureOptions<>))

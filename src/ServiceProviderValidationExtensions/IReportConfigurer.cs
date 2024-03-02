@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ServiceProviderValidationExtensions;
 
-public interface IReportingBuilder
+public interface IReportConfigurer
 {
     void Report(IServiceCollection serviceCollection);
 }

@@ -12,9 +12,9 @@ public static class HostBuilderExtensions
         return hostBuilder;
     }
 
-    public static IHostBuilder UseServiceProviderExtendedValidation(this IHostBuilder hostBuilder, Action<ReportingBuilder> configureReporting)
+    public static IHostBuilder UseServiceProviderExtendedValidation(this IHostBuilder hostBuilder, Action<ReportConfigurer> configureReporting)
     {
-        var reportingBuilder = new ReportingBuilder();
+        var reportingBuilder = new ReportConfigurer();
         configureReporting(reportingBuilder);
         hostBuilder.UseServiceProviderFactory(new ExtendedValidationServiceProviderFactory(new DefaultServiceProviderFactory(), reportingBuilder));
         return hostBuilder;
@@ -28,10 +28,10 @@ public static class HostBuilderExtensions
     }
 
     public static HostApplicationBuilder ConfigureContainerWithServiceProviderExtendedValidation(this HostApplicationBuilder hostApplicationBuilder,
-        Action<ReportingBuilder> configureReporting,
+        Action<ReportConfigurer> configureReporting,
         Action<IServiceCollection>? configure = null)
     {
-        var reportingBuilder = new ReportingBuilder();
+        var reportingBuilder = new ReportConfigurer();
         configureReporting(reportingBuilder);
         hostApplicationBuilder.ConfigureContainer(new ExtendedValidationServiceProviderFactory(new DefaultServiceProviderFactory(), reportingBuilder), configure);
         return hostApplicationBuilder;
