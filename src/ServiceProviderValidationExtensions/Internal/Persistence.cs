@@ -17,24 +17,25 @@ internal static class Persistence
             return validationRegistrations;
         }
 
-        validationRegistrations = SearchForValidationRegistrations(services, out var serviceDescriptor);
-        if (validationRegistrations is not null)
-        {
-            // Move instance to index 0
-            services.Remove(serviceDescriptor);
-            services.Insert(0, serviceDescriptor);
+        var searchForValidationRegistrations = SearchForValidationRegistrations(services);
 
-            return validationRegistrations;
+        if (searchForValidationRegistrations is null)
+        {
+            return CreateAndPersistInstance(services);
         }
 
-        return CreateAndPersistInstance(services);
+        // Move instance to index 0
+        services.Remove(searchForValidationRegistrations.Value.serviceDescriptor);
+        services.Insert(0, searchForValidationRegistrations.Value.serviceDescriptor);
 
-        static ValidationRegistrations CreateAndPersistInstance(IServiceCollection services)
-        {
-            var validationRegistrations = new ValidationRegistrations();
-            services.Insert(0, new ServiceDescriptor(typeof(ValidationRegistrations), validationRegistrations));
-            return validationRegistrations;
-        }
+        return searchForValidationRegistrations.Value.validationRegistrations;
+    }
+
+    private static ValidationRegistrations CreateAndPersistInstance(IServiceCollection services)
+    {
+        var validationRegistrations = new ValidationRegistrations();
+        services.Insert(0, new ServiceDescriptor(typeof(ValidationRegistrations), validationRegistrations));
+        return validationRegistrations;
     }
 
     private static ValidationRegistrations? TryGetValidationRegistrationsAtExpectedIndex(IServiceCollection services)
@@ -42,9 +43,16 @@ internal static class Persistence
         return services[0].ImplementationInstance as ValidationRegistrations;
     }
 
-    private static ValidationRegistrations? SearchForValidationRegistrations(IServiceCollection services, out ServiceDescriptor? serviceDescriptor)
+    
+    private static (ValidationRegistrations validationRegistrations, ServiceDescriptor serviceDescriptor)? SearchForValidationRegistrations(IServiceCollection services)
     {
-        serviceDescriptor = services.FirstOrDefault(sd => sd.ImplementationInstance is ValidationRegistrations);
-        return (ValidationRegistrations?)serviceDescriptor?.ImplementationInstance;
+        var serviceDescriptor = services.FirstOrDefault(sd => sd.ImplementationInstance is ValidationRegistrations);
+        if (serviceDescriptor is null)
+        {
+            return null;
+        }
+
+        var validationRegistrations = (ValidationRegistrations)serviceDescriptor.ImplementationInstance!;
+        return (validationRegistrations, serviceDescriptor);
     }
 }
