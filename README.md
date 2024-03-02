@@ -3,7 +3,7 @@
 This library makes more fine-grained control possible for registration in the ServiceProvider.
 These are especially useful for large complicated application.
 
-It contains the features listed below:
+It contains the following features:
 
 ### Exclusive service registration
 
