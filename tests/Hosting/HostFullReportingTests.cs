@@ -16,11 +16,12 @@ public class HostFullReportingTests
 
         void ConfigureReporting(ReportConfigurer rb)
         {
-            rb.OnDuplicateService(dsc => duplicateServiceReports.Add($"{dsc.ServiceType.DisplayName} is registered {dsc.ImplementationTypes.Count} times"),
+            rb.OnDuplicateService(
+                dsc => duplicateServiceReports.Add($"{dsc.ServiceType.DisplayName} is registered {dsc.ImplementationTypes.Count} times"),
                 c => c.Except(typeof(IConfigureOptions<>))
-                .Except(typeof(IStartupValidator))
-                .Except(typeof(IOptionsChangeTokenSource<>))
-                .Except<ILoggerProvider>());
+                    .Except(typeof(IStartupValidator))
+                    .Except(typeof(IOptionsChangeTokenSource<>))
+                    .Except<ILoggerProvider>());
         }
 
         Host.CreateDefaultBuilder().UseServiceProviderExtendedValidation(ConfigureReporting).Build();
