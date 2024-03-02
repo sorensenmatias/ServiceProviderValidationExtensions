@@ -40,9 +40,24 @@ serviceCollection.AddSingleton<IMyService, MyService>(ServiceValidation.Exclusiv
 
 ### Reporting
 
+The reporting functionality makes it possible to get insights into the registrations in the ServiceProvider.
+It currently supports detecting duplicate service registrations.
+
+```
+void ConfigureReporting(ReportConfigurer rb)
+{
+    rb.OnDuplicateService(
+        ds => Console.WriteLine($"{ds.ServiceType} is registered {dsc.ImplementationTypes.Count} times"),
+        c => c.Except(typeof(IConfigureOptions<>)).Except<ILoggerProvider>());
+}
+
+Host.CreateDefaultBuilder().UseServiceProviderExtendedValidation(ConfigureReporting).Build();
+```
+
 ## Invoking the validation
 
-There are two ways of invoking the validation:
+There are two ways of invoking the validation, as described below.
+In case any validation fails, a `ServiceProviderValidationException` is thrown.
 
 ### Hosting extensions
 
