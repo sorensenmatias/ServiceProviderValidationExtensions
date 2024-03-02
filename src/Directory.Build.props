@@ -8,8 +8,13 @@
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageReadmeFile>readme.md</PackageReadmeFile>
 
+        <Version>0.1.0</Version>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
+        <FileVersion>0.1.0</FileVersion>
+
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);CS1591</NoWarn>
+
     </PropertyGroup>
 
     <ItemGroup>
