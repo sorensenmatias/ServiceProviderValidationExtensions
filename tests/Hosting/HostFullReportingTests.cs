@@ -2,10 +2,9 @@ using FluentAssertions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ServiceProviderValidationExtensions;
 using ServiceProviderValidationExtensions.Hosting;
 
-namespace Tests.Hosting;
+namespace ServiceProviderValidationExtensions.Tests.Hosting;
 
 public class HostFullReportingTests
 {

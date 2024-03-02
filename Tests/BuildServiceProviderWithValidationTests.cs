@@ -1,8 +1,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceProviderValidationExtensions;
 
-namespace Tests;
+namespace ServiceProviderValidationExtensions.Tests;
 
 public class BuildServiceProviderWithValidationTests
 {
@@ -11,7 +10,7 @@ public class BuildServiceProviderWithValidationTests
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.AddSingleton<IMyService, MyService>();
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(serviceCollection);
         serviceCollection.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
 
         var act = () => serviceCollection.BuildServiceProviderWithValidation();
@@ -26,7 +25,7 @@ public class BuildServiceProviderWithValidationTests
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddSingleton<MyService>(ServiceValidation.ExclusiveService);
-        serviceCollection.AddSingleton<IMyService, MyService>();
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(serviceCollection);
 
         var act = () => serviceCollection.BuildServiceProviderWithValidation();
         act.Should().NotThrow();
@@ -37,7 +36,7 @@ public class BuildServiceProviderWithValidationTests
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.AddSingleton<IMyService, MyService>();
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(serviceCollection);
         serviceCollection.AddSingleton<IMyService, MyService>(ImplementationValidation.ExclusiveImplementation);
 
         var act = () => serviceCollection.BuildServiceProviderWithValidation();

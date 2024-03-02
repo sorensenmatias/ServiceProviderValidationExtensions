@@ -1,10 +1,9 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ServiceProviderValidationExtensions;
 using ServiceProviderValidationExtensions.Hosting;
 
-namespace Tests.Hosting;
+namespace ServiceProviderValidationExtensions.Tests.Hosting;
 
 public class HostTests
 {
@@ -15,7 +14,7 @@ public class HostTests
             .UseServiceProviderExtendedValidation()
             .ConfigureServices(sc =>
             {
-                sc.AddSingleton<IMyService, MyService>();
+                ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(sc);
                 sc.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
             });
 
@@ -35,8 +34,8 @@ public class HostTests
             .UseServiceProviderExtendedValidation(rb => rb.OnDuplicateService(dsc => duplicates.Add($"{dsc.ServiceType.DisplayName} is registered 2 times")))
             .ConfigureServices(sc =>
             {
-                sc.AddSingleton<IMyService, MyService>();
-                sc.AddSingleton<IMyService, MyService>();
+                ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(sc);
+                ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(sc);
             });
 
         applicationBuilder.Build();
@@ -49,7 +48,7 @@ public class HostTests
     {
         var applicationBuilder = Host.CreateApplicationBuilder().ConfigureContainerWithServiceProviderExtendedValidation();
 
-        applicationBuilder.Services.AddSingleton<IMyService, MyService>();
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(applicationBuilder.Services);
         applicationBuilder.Services.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
 
         var act = () => applicationBuilder.Build();
@@ -70,8 +69,8 @@ public class HostTests
                     duplicates.Add($"{dsc.ServiceType.DisplayName} is registered 2 times")));
 
 
-        applicationBuilder.Services.AddSingleton<IMyService, MyService>();
-        applicationBuilder.Services.AddSingleton<IMyService, MyService>();
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(applicationBuilder.Services);
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(applicationBuilder.Services);
 
         applicationBuilder.Build();
 
@@ -83,7 +82,7 @@ public class HostTests
     {
         var applicationBuilder = Host.CreateEmptyApplicationBuilder(null).ConfigureContainerWithServiceProviderExtendedValidation();
 
-        applicationBuilder.Services.AddSingleton<IMyService, MyService>();
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(applicationBuilder.Services);
         applicationBuilder.Services.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
 
         var act = () => applicationBuilder.Build();

@@ -1,8 +1,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceProviderValidationExtensions;
 
-namespace Tests;
+namespace ServiceProviderValidationExtensions.Tests;
 
 public class ReportingTests
 {
@@ -11,8 +10,8 @@ public class ReportingTests
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.AddSingleton<IMyService, MyService>();
-        serviceCollection.AddSingleton<IMyService, MyService2>();
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(serviceCollection);
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService2>(serviceCollection);
 
         var duplicateServiceOutput = new List<string>();
 
@@ -29,7 +28,7 @@ public class ReportingTests
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.AddSingleton<IMyService, MyService>();
+        ServiceCollectionServiceExtensions.AddSingleton<IMyService, MyService>(serviceCollection);
         serviceCollection.AddSingleton<IMyService>(_ => new MyService2());
 
         var duplicateServiceOutput = new List<string>();

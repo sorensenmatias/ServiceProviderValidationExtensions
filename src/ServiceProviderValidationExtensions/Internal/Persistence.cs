@@ -18,7 +18,6 @@ internal static class Persistence
         }
 
         var searchForValidationRegistrations = SearchForValidationRegistrations(services);
-
         if (searchForValidationRegistrations is null)
         {
             return CreateAndPersistInstance(services);
