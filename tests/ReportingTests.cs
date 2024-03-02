@@ -20,7 +20,7 @@ public class ReportingTests
 
         serviceCollection.BuildServiceProviderWithValidation(reportingBuilder);
 
-        duplicateServiceOutput.Should().ContainSingle().Which.Should().Be("Tests.ReportingTests+IMyService is registered 2 times");
+        duplicateServiceOutput.Should().ContainSingle().Which.Should().Be("ServiceProviderValidationExtensions.Tests.ReportingTests+IMyService is registered 2 times");
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class ReportingTests
 
         serviceCollection.BuildServiceProviderWithValidation(reportingBuilder);
 
-        duplicateServiceOutput.Should().ContainSingle().Which.Should().Be("Tests.ReportingTests+IMyService is registered 2 times");
+        duplicateServiceOutput.Should().ContainSingle().Which.Should().Be("ServiceProviderValidationExtensions.Tests.ReportingTests+IMyService is registered 2 times");
     }
 
     private interface IMyService

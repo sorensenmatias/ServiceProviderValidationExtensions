@@ -40,7 +40,7 @@ public class HostTests
 
         applicationBuilder.Build();
 
-        duplicates.Should().Contain("Tests.Hosting.HostTests+IMyService is registered 2 times");
+        duplicates.Should().Contain("ServiceProviderValidationExtensions.Tests.Hosting.HostTests+IMyService is registered 2 times");
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class HostTests
 
         applicationBuilder.Build();
 
-        duplicates.Should().Contain("Tests.Hosting.HostTests+IMyService is registered 2 times");
+        duplicates.Should().Contain("ServiceProviderValidationExtensions.Tests.Hosting.HostTests+IMyService is registered 2 times");
     }
 
     [Fact]
