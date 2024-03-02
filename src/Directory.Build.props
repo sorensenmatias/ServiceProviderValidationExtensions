@@ -7,6 +7,11 @@
         <Authors>Matias Sørensen</Authors>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <Description>Enables fine-grained control for service registration in ServiceProvider.</Description>
+        <PackageTags>DependencyInjection;ServiceProvider</PackageTags>
+        <PackageProjectUrl>https://github.com/sorensenmatias/ServiceProviderValidationExtensions</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/sorensenmatias/ServiceProviderValidationExtensions.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
 
         <Version>0.1.0</Version>
         <AssemblyVersion>0.1.0</AssemblyVersion>
