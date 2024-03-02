@@ -10,4 +10,9 @@ public class TypeInfo
 
     public Type? Type { get; }
     public string? DisplayName { get; }
+
+    public override string? ToString()
+    {
+        return DisplayName;
+    }
 }
