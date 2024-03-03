@@ -77,6 +77,7 @@ public class HostTests
         duplicates.Should().Contain("ServiceProviderValidationExtensions.Tests.Hosting.HostTests+IMyService is registered 2 times");
     }
 
+#if NET8_0_OR_GREATER
     [Fact]
     public void EmptyApplicationBuilder_TriggersValidation()
     {
@@ -91,6 +92,7 @@ public class HostTests
             .ThrowExactly<ServiceProviderValidationException>()
             .WithMessage("ServiceProvider validation failed with the following errors:\r\n\r\nService IMyService is exclusive, but is registered 2 times.");
     }
+#endif
 
     public interface IMyService
     {

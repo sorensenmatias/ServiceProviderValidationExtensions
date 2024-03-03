@@ -18,7 +18,9 @@ public class HostFullReportingTests
             rb.OnDuplicateService(
                 dsc => duplicateServiceReports.Add($"{dsc.ServiceType.DisplayName} is registered {dsc.ImplementationTypes.Count} times"),
                 c => c.Except(typeof(IConfigureOptions<>))
+#if NET8_0_OR_GREATER
                     .Except(typeof(IStartupValidator))
+#endif
                     .Except(typeof(IOptionsChangeTokenSource<>))
                     .Except<ILoggerProvider>());
         }
