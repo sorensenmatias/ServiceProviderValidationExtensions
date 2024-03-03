@@ -8,10 +8,12 @@ internal static class TypeExtensions
         {
             throw new ArgumentException("type must be generic", nameof(parentType));
         }
+
         if (type == null || type == typeof(object))
         {
             return false;
         }
+
         if (type.IsGenericType && type.GetGenericTypeDefinition() == parentType)
         {
             return true;

@@ -5,9 +5,14 @@ namespace ServiceProviderValidationExtensions;
 
 public sealed class ReportConfigurer : IReportConfigurer
 {
-    private Action<DuplicateServiceContent>? _duplicateServiceAction;
     private readonly IList<Type> _duplicateServiceExclusions = new List<Type>();
-    
+    private Action<DuplicateServiceContent>? _duplicateServiceAction;
+
+    public void Report(IServiceCollection serviceCollection)
+    {
+        ReportDuplicateServices(serviceCollection);
+    }
+
     public ReportConfigurer OnDuplicateService(Action<DuplicateServiceContent> action,
         Action<ReportingDuplicateServiceConfiguration>? configuration = null)
     {
@@ -16,35 +21,8 @@ public sealed class ReportConfigurer : IReportConfigurer
         {
             configuration(new ReportingDuplicateServiceConfiguration(this));
         }
-        
+
         return this;
-    }
-
-    public sealed class ReportingDuplicateServiceConfiguration
-    {
-        private readonly ReportConfigurer _reportConfigurer;
-
-        internal ReportingDuplicateServiceConfiguration(ReportConfigurer reportConfigurer)
-        {
-            _reportConfigurer = reportConfigurer;
-        }
-
-        public ReportingDuplicateServiceConfiguration Except<T>()
-        {
-            _reportConfigurer._duplicateServiceExclusions.Add(typeof(T));
-            return this;
-        }
-
-        public ReportingDuplicateServiceConfiguration Except(Type type)
-        {
-            _reportConfigurer._duplicateServiceExclusions.Add(type);
-            return this;
-        }
-    }
-
-    public void Report(IServiceCollection serviceCollection)
-    {
-        ReportDuplicateServices(serviceCollection);
     }
 
     private void ReportDuplicateServices(IServiceCollection serviceCollection)
@@ -88,6 +66,28 @@ public sealed class ReportConfigurer : IReportConfigurer
 
             var duplicateServiceContent = new DuplicateServiceContent(new TypeInfo(groupItem.Key), implementationTypes);
             _duplicateServiceAction(duplicateServiceContent);
+        }
+    }
+
+    public sealed class ReportingDuplicateServiceConfiguration
+    {
+        private readonly ReportConfigurer _reportConfigurer;
+
+        internal ReportingDuplicateServiceConfiguration(ReportConfigurer reportConfigurer)
+        {
+            _reportConfigurer = reportConfigurer;
+        }
+
+        public ReportingDuplicateServiceConfiguration Except<T>()
+        {
+            _reportConfigurer._duplicateServiceExclusions.Add(typeof(T));
+            return this;
+        }
+
+        public ReportingDuplicateServiceConfiguration Except(Type type)
+        {
+            _reportConfigurer._duplicateServiceExclusions.Add(type);
+            return this;
         }
     }
 

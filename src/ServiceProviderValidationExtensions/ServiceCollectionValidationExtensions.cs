@@ -171,7 +171,7 @@ public static class ServiceCollectionValidationExtensions
     }
 
     /// <summary>
-    ///     Marks the <see cref="TService"/> as exclusive (only one registration can exist in the ServiceProvider).
+    ///     Marks the <see cref="TService" /> as exclusive (only one registration can exist in the ServiceProvider).
     /// </summary>
     public static IServiceCollection SetExclusiveService<TService>(this IServiceCollection services)
         where TService : class
@@ -197,7 +197,8 @@ public static class ServiceCollectionValidationExtensions
     }
 
     /// <summary>
-    ///     Marks the (<see cref="TService"/>,<see cref="TImplementation"/>) combination as exclusive (only one registration can exist in the ServiceProvider). 
+    ///     Marks the (<see cref="TService" />,<see cref="TImplementation" />) combination as exclusive (only one registration
+    ///     can exist in the ServiceProvider).
     /// </summary>
     public static void SetExclusiveImplementation<TService, TImplementation>(this IServiceCollection services)
         where TImplementation : class

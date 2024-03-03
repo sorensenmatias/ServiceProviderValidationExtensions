@@ -42,7 +42,7 @@ internal static class Persistence
         return services[0].ImplementationInstance as ValidationRegistrations;
     }
 
-    
+
     private static (ValidationRegistrations validationRegistrations, ServiceDescriptor serviceDescriptor)? SearchForValidationRegistrations(IServiceCollection services)
     {
         var serviceDescriptor = services.FirstOrDefault(sd => sd.ImplementationInstance is ValidationRegistrations);
