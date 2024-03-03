@@ -1,6 +1,6 @@
 # ServiceProviderValidationExtensions
 
-This library makes more fine-grained control possible for registration in the ServiceProvider.
+This library makes more fine-grained control possible for registrations in ServiceProvider.
 These are especially useful for large complicated application.
 
 It contains the following features:
