@@ -3,6 +3,12 @@
 This library enables more fine-grained control for registrations in ServiceProvider. 
 These are especially useful for large complicated application.
 
+## What does this solve?
+
+In some cases, it is critical for a dependency to only be registered once. 
+For example, you may want to ensure a specfic ASP.NET middleware is only registered once for performance reasons. In large applications (with a lot of dependencies), it may not be obvious what codepaths that registeres middlewares. 
+With this library you can easily specify this requirement and be sure that your application does not run this unneccesary instance of the same middleware.
+
 ## Installation
 
 There are two separate NuGet packages supplied:
