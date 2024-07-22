@@ -1,9 +1,18 @@
 # ServiceProviderValidationExtensions
 
-This library makes more fine-grained control possible for registrations in ServiceProvider.
+This library enables more fine-grained control for registrations in ServiceProvider. 
 These are especially useful for large complicated application.
 
-It contains the following features:
+## Installation
+
+There are two separate NuGet packages supplied:
+
+- `ServiceProviderValidationExtensions` which can be used with àny .NET app (think 'raw' ServiceProvider cases).
+- `ServiceProviderValidationExtensions.Hosting` which is designed to be used together with ``Microsoft.Extensions.Hosting`` (think ServiceProviders used within ASP.NET) .
+
+## Features
+
+The following features are supplied:
 
 ### Exclusive service registration
 
@@ -20,8 +29,6 @@ Alternatively, overloads for the more common signatures of `AddSingleton`, `AddS
 serviceCollection.AddSingleton<MyService>(ServiceValidation.ExclusiveService);
 serviceCollection.AddSingleton<IMyService, MyService>(ServiceValidation.ExclusiveService);
 ```
-
-
 
 ### Exclusive implementation registration
 
@@ -56,9 +63,9 @@ Host.CreateDefaultBuilder()
     .Build();
 ```
 
-## Invoking the validation
+## How to wire it up
 
-There are two ways of invoking the validation, as described below.
+There are two ways of actually invoking the validation, as described below.
 In case any validation fails, a `ServiceProviderValidationException` is thrown.
 
 ### Hosting extensions
