@@ -51,7 +51,9 @@ void ConfigureReporting(ReportConfigurer rb)
         c => c.Except(typeof(IConfigureOptions<>)).Except<ILoggerProvider>());
 }
 
-Host.CreateDefaultBuilder().UseServiceProviderExtendedValidation(ConfigureReporting).Build();
+Host.CreateDefaultBuilder()
+    .UseServiceProviderExtendedValidation(ConfigureReporting)
+    .Build();
 ```
 
 ## Invoking the validation
@@ -66,6 +68,7 @@ Reference the ServiceProviderValidationExtensions.Hosting package and use the `U
 ```
 Host.CreateDefaultBuilder()
     .UseServiceProviderExtendedValidation()
+    .Build();
 ```
 
 or
@@ -73,6 +76,7 @@ or
 ```
 Host.CreateApplicationBuilder()
     .ConfigureContainerWithServiceProviderExtendedValidation()
+    .Build();
 ```
 
 ### Manually building the ServiceProvider
