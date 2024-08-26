@@ -5,9 +5,14 @@ These are especially useful for large complicated application.
 
 ## What does this solve?
 
-In some cases, it is critical for a dependency to only be registered once. 
-For example, you may want to ensure a specfic ASP.NET middleware is only registered once for performance reasons. In large applications (with a lot of dependencies), it may not be obvious what codepaths that registeres middlewares. 
+It can be critical for a dependency to only be registered once. 
+
+### Example 1 - avoid duplicate registrations
+You may want to ensure a specfic ASP.NET middleware is only registered once for performance reasons. In large applications (with a lot of dependencies), it may not be obvious what codepaths that registeres middlewares. 
 With this library you can easily specify this requirement and be sure that your application does not run this unneccesary instance of the same middleware.
+
+### Example 2 - context specific registraions
+You may have multiple implementaions of an interface, and you want to be ensure only the proper implementation is registered in a particular context.
 
 ## Installation
 
