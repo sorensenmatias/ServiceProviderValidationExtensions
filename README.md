@@ -5,14 +5,21 @@ These are especially useful for large complicated application.
 
 ## What does this solve?
 
-It can be critical for a dependency to only be registered once. 
+It can be critical for a dependency to only be registered once in ServiceProvider. By implementaion, ServiceProvider will resolve the first occourence in its list of services in case the service has been registered multiple times. However, this can be problematic in some sitations, as described below.
 
-### Example 1 - avoid duplicate registrations
+### Situation 1 - avoid duplicate registrations
 You may want to ensure a specfic ASP.NET middleware is only registered once for performance reasons. In large applications (with a lot of dependencies), it may not be obvious what codepaths that registeres middlewares. 
 With this library you can easily specify this requirement and be sure that your application does not run this unneccesary instance of the same middleware.
 
-### Example 2 - context specific registraions
+### Situation 2 - context specific registraions
 You may have multiple implementaions of an interface, and you want to be ensure only the proper implementation is registered in a particular context.
+
+### Situation 3 - 'IEnumerable registrations'
+If the same service type is registered multiple times in the ServiceProvider, all its implementations can be injected by taking a dependency on IEnumerable<ServiceType>.
+But it can be important not to have the same implementation registered multiple times.
+
+### Notes on the existing TryAdd* methods
+If the TryAddScoped, TryAddSingleton, etc methods are used consistently they will make sure a dependency is only registered once. But this will only partially resolve the situations described above. 
 
 ## Installation
 
